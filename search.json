@@ -7,13 +7,6 @@
     "text": "About this blog"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "My Data Stories",
-    "section": "",
-    "text": "A test post\n\n\n\nvisualization\n\ndata stories\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nJan 12, 2026\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
-  },
-  {
     "objectID": "posts/000_test_post/index.html",
     "href": "posts/000_test_post/index.html",
     "title": "A test post",
@@ -26,5 +19,33 @@
     "title": "A test post",
     "section": "Stories from data",
     "text": "Stories from data\n\nLet’s set up some data\n\n\nx = ['A', 'B', 'C']\ny = [1, 5, 3]\n\n\nNow let’s visualize it\n\nplt.bar(x, y)\nplt.show()"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "My Data Stories",
+    "section": "",
+    "text": "What are the warmest and rainiest days in Philadelphia?\n\n\n\ndata stories\n\nweather\n\n\n\nI took analyzed weather data in Philadelphia from 2010.\n\n\n\n\n\nFeb 6, 2026\n\n\nNicholas Maharaj\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nvisualization\n\ndata stories\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nJan 12, 2026\n\n\nAn LLM User\n\n\n\n\n\n\n\n\n\n\n\n\nA test post\n\n\n\nvisualization\n\ndata stories\n\n\n\nAn example post from a Jupyter notebook\n\n\n\n\n\nJan 12, 2026\n\n\nAn LLM User\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/000_test_post/testpost.html",
+    "href": "posts/000_test_post/testpost.html",
+    "title": "A test post",
+    "section": "",
+    "text": "import matplotlib.pyplot as plt"
+  },
+  {
+    "objectID": "posts/000_test_post/testpost.html#stories-from-data",
+    "href": "posts/000_test_post/testpost.html#stories-from-data",
+    "title": "A test post",
+    "section": "Stories from data",
+    "text": "Stories from data\n\nLet’s set up some data\n\n\nx = ['A', 'B', 'C']\ny = [1, 5, 3]\n\n\nNow let’s visualize it\n\nplt.bar(x, y)\nplt.show()"
+  },
+  {
+    "objectID": "posts/001_phillyweather/weather.html",
+    "href": "posts/001_phillyweather/weather.html",
+    "title": "What are the warmest and rainiest days in Philadelphia?",
+    "section": "",
+    "text": "What time of the year, on average, is the best time to host summer parties in Philadelphia?\nFor the best summer parties, whether it’s a pool party or an outdoor barbecue, two important factors are necessary: it’s warm outside, and there is no rain. Sometimes, people need to plan their summer parties in advance to accommodate any travel plans. l\nTo give Philadelphia’s residents a better idea of when to host these summer parties, I analyzed weather data from 2010 to 2025 to determine what days tend to have the warmest temperatures or the most rainfall.\n\nWhat tends to be the warmest time of the year in Philadelphia?\n\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\n\n\nweather_df = pd.read_csv('philadelphia_weather_2005_to_2025.csv')\nweather_df = weather_df.assign(date=pd.to_datetime(weather_df['date']))\n\n\nweather_df = weather_df[weather_df[\"date\"].dt.year &gt;= 2010]\n\n\nwarmest_days = weather_df.loc[\n    weather_df.groupby(weather_df[\"date\"].dt.year)[\"high\"].idxmax()\n]\n\nwarmest_days[[\"date\", \"high\"]]\n\n\n\n\n\n\n\n\ndate\nhigh\n\n\n\n\n2013\n2010-07-07\n103\n\n\n2393\n2011-07-22\n103\n\n\n2744\n2012-07-07\n101\n\n\n3120\n2013-07-18\n98\n\n\n3469\n2014-07-02\n96\n\n\n3897\n2015-09-03\n96\n\n\n4242\n2016-08-13\n98\n\n\n4546\n2017-06-13\n96\n\n\n4931\n2018-07-03\n98\n\n\n5314\n2019-07-21\n98\n\n\n5662\n2020-07-03\n97\n\n\n6024\n2021-06-30\n97\n\n\n6413\n2022-07-24\n99\n\n\n6823\n2023-09-07\n97\n\n\n7112\n2024-06-22\n98\n\n\n7479\n2025-06-24\n101\n\n\n\n\n\n\n\nFrom this table, you can see that Philadelphia mostly sees high temperatures between 96 and 103. Most of these dates occur in July and August. When you take the average of these days, you get July 16.\nThis data shows that Philadelphia residents can trust July and August for hosting their summer parties and can expect high and warm temperatures. Specifically, July 16 seems like the safest bet for a pool party, since history shows that the warmest temperatures occur around this date every year.\n\n\nWhat tends to be the rainiest time of the year in Philadelphia?\n\n\nrainiest_days = weather_df.loc[\n    weather_df.groupby(weather_df[\"date\"].dt.year)[\"rain\"].idxmax()\n]\n\nrainiest_days[[\"date\", \"rain\"]]\n\n\n\n\n\n\n\n\ndate\nrain\n\n\n\n\n2099\n2010-10-01\n3.00\n\n\n2416\n2011-08-14\n4.84\n\n\n2803\n2012-09-04\n3.12\n\n\n3130\n2013-07-28\n8.02\n\n\n3406\n2014-04-30\n4.42\n\n\n3904\n2015-09-10\n4.76\n\n\n4158\n2016-05-21\n1.96\n\n\n4641\n2017-09-16\n2.58\n\n\n4997\n2018-09-07\n4.54\n\n\n5283\n2019-06-20\n2.87\n\n\n5694\n2020-08-04\n4.16\n\n\n6083\n2021-08-28\n3.17\n\n\n6483\n2022-10-02\n1.99\n\n\n6925\n2023-12-18\n2.19\n\n\n7021\n2024-03-23\n3.09\n\n\n7368\n2025-03-05\n1.54\n\n\n\n\n\n\n\nFrom this table, we can see that September and the fall months tend to have the most rainfall, with up to 8 inches of rain in August. The rainfall data is more scattered, though, and is not concentrated to one specific month.\nHowever, when we take the average of these dates, we get July 30.\nFrom this, we can determine that hosting summer parties is not a good idea toward the end of July. Additionally, hosting outdoor parties is also not a good idea at the beginning of fall. Not just because of the weather, but also because it could rain.\n\n\nConclusion\nAfter reviewing this data, we can determine that the best time of year to host a summer party is mid-July. This time of year has the warmest weather, according to the average data. Mid-July also swiftly avoids any rainfall. This is perfect for any Fourth of July barbecue!"
   }
 ]
