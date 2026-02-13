@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="An LLM User">
-<meta name="dcterms.date" content="2026-01-12">
-<meta name="description" content="An example post from a Jupyter notebook">
+<meta name="author" content="Nicholas Maharaj">
+<meta name="dcterms.date" content="2026-02-13">
+<meta name="description" content="I analyzed Big Five Personality data in three Caribbean countries and compared it to three South Asian countries.">
 
-<title>A test post – My Data Stories</title>
+<title>How does the Big Five Personality traits vary among similar regions? – My Data Stories</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,15 +148,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">A test post</h1>
+      <h1 class="title">How does the Big Five Personality traits vary among similar regions?</h1>
                   <div>
         <div class="description">
-          An example post from a Jupyter notebook
+          I analyzed Big Five Personality data in three Caribbean countries and compared it to three South Asian countries.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">visualization</div>
                 <div class="quarto-category">data stories</div>
+                <div class="quarto-category">region</div>
               </div>
                   </div>
   </div>
@@ -167,14 +167,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>An LLM User </p>
+               <p>Nicholas Maharaj </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 12, 2026</p>
+        <p class="date">February 13, 2026</p>
       </div>
     </div>
     
@@ -193,31 +193,124 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div id="aa3244f6-8010-4390-b8ca-383ad9126fa1" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><img src="ptype.webp" class="img-fluid"></p>
+<section id="how-do-personality-types-compare-across-different-but-culturally-similar-countries" class="level1">
+<h1>How do personality types compare across different, but culturally similar, countries?</h1>
+<p>The Big Five personality quiz is a significant and scientifically accepted test that assesses personality traits on five main scales: openness, conscientiousness, extraversion, agreeableness, and neuroticism. The scales are shortened to the acronym OCEAN. Since the personality test is widely used, I was curious to see how different personality types would compare across different countries. Specifically, I was interested in seeing if ethnicity or culture is related to personality type.</p>
+<p>To create an interesting analysis, I decided to look at two different regions, the Caribbean and South Asia. Specifically, the countries of Guyana, Trinidad, Jamaica, India, Pakistan, and Bangladesh. These regions are interesting because the Caribbean countries have a significant South Asian diaspora population.</p>
+<p>To conduct this analysis, I looked at historical data of Big Five personality scores.</p>
+<section id="how-do-personality-types-compare-across-the-caribbean" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-personality-types-compare-across-the-caribbean">How do personality types compare across the Caribbean?</h3>
+<p>I first looked at how the data compared across Guyana, Jamaica, and Trinidad, by importing the data and coding the following graph.</p>
+<div id="1fe2500d-0c40-44dc-a1d3-db69f2f91755" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="stories-from-data" class="level2">
-<h2 class="anchored" data-anchor-id="stories-from-data">Stories from data</h2>
-<ul>
-<li>Let’s set up some data</li>
-</ul>
-<div id="9c799178-2c98-46a7-87fb-3fbbef3bcc05" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="69e6d8c9-ce09-42a5-add4-fa20850e1d92" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>big5_df <span class="op">=</span> pd.read_csv(<span class="st">'data/openpsych_data.csv'</span>, sep<span class="op">=</span><span class="st">'</span><span class="ch">\t</span><span class="st">'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="now-lets-visualize-it" class="level3">
-<h3 class="anchored" data-anchor-id="now-lets-visualize-it">Now let’s visualize it</h3>
-<div id="9e226edb-5315-4d01-a6a6-709d5858e4a9" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plt.bar(x, y)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="d4104e29-6346-4e56-9c42-46d7858388de" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>factor_map <span class="op">=</span> { <span class="dv">1</span>: <span class="st">'E'</span>, </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>               <span class="dv">2</span>: <span class="st">'A'</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>               <span class="dv">3</span>: <span class="st">'C'</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>               <span class="dv">4</span>: <span class="st">'N'</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>               <span class="dv">5</span>: <span class="st">'O'</span> }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="5b06c883-ae64-4f14-aeb9-71299f213c65" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ipip_df <span class="op">=</span> pd.read_html(<span class="st">'big5_questions.html'</span>, header<span class="op">=</span><span class="dv">0</span>)[<span class="dv">0</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>ipip_df <span class="op">=</span> ipip_df.rename(columns<span class="op">=</span>{<span class="st">'Unnamed: 1'</span>: <span class="st">'text'</span>, <span class="st">'Unnamed: 7'</span>: <span class="st">'factor_and_direction'</span>})[[<span class="st">'text'</span>,<span class="st">'factor_and_direction'</span>]]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ipip_df[[<span class="st">'factor'</span>,<span class="st">'direction'</span>]]<span class="op">=</span>ipip_df[<span class="st">'factor_and_direction'</span>].<span class="bu">str</span>.extract(<span class="vs">r'</span><span class="kw">(</span><span class="pp">[1-5]</span><span class="kw">)(</span><span class="dv">.</span><span class="kw">)</span><span class="vs">'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ipip_df[<span class="st">'category'</span>]<span class="op">=</span>ipip_df[<span class="st">'factor'</span>].astype(<span class="bu">int</span>).<span class="bu">map</span>(factor_map)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cfdb5e8e-457f-429d-8e84-4c5bab2ef0bf" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ipip_df <span class="op">=</span> ipip_df.assign(number<span class="op">=</span>np.repeat(np.arange(<span class="dv">1</span>,<span class="dv">11</span>),<span class="dv">5</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ipip_df <span class="op">=</span> ipip_df.assign(qcode<span class="op">=</span>ipip_df[<span class="st">'category'</span>].<span class="bu">str</span>.cat(ipip_df[<span class="st">'number'</span>].astype(<span class="bu">str</span>)))   </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="12d6e777-6755-45a4-939d-2acd76852f02" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>neg_items <span class="op">=</span> ipip_df.query(<span class="st">'direction=="-"'</span>)[<span class="st">'qcode'</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="6246fa01-0391-4bbd-b3c7-8cead0787f0a" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>big5_scored_df <span class="op">=</span> big5_df.copy()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cb0b87f1-22d4-4536-91f8-ff34bd2c200a" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>big5_scored_df[neg_items] <span class="op">=</span> <span class="dv">6</span><span class="op">-</span>big5_df[neg_items]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="cf4b68f9-2945-4ffc-8d2e-4d822383be96" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cat_cols <span class="op">=</span> {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    cat : [<span class="ss">f'</span><span class="sc">{</span>cat<span class="sc">}{</span>n<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)] </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> cat <span class="kw">in</span> (<span class="st">'O'</span>,<span class="st">'C'</span>,<span class="st">'E'</span>,<span class="st">'A'</span>,<span class="st">'N'</span>) </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="fdec01c1-e0fb-4845-9a6e-70409dccb25d" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cat, cols <span class="kw">in</span> cat_cols.items():</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    big5_scored_df[cat]<span class="op">=</span>big5_scored_df[cols].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="0a218af2-3643-42df-af93-2e3a401a9a96" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    big5_scored_df.query(<span class="st">'country in ["TT","GY","JM"]'</span>).</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        groupby(<span class="st">'country'</span>)[[<span class="st">'O'</span>,<span class="st">'C'</span>,<span class="st">'E'</span>,<span class="st">'A'</span>,<span class="st">'N'</span>]].</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        agg(<span class="st">'mean'</span>).</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">round</span>(<span class="dv">1</span>).</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        transpose().</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        plot(kind<span class="op">=</span><span class="st">'barh'</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="testpost_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="blog_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>The graph above shows that the Caribbean countries have a diverse set of scores on the Big 5 personality test. The countries score similarly for neuroticism, with Guyana and Trinidad almost scoring identically. Jamaica and Trinidad tend to have similar scores across all 5 factors, with Guyana as an outlier. The diverse personality types of this region can be explained by the region’s very diverse cultures and ethnicities. For example, the history and culture of Afro-, Indo-, and Indigenous Caribbeans can explain the varied personality scores. However, it is interesting to note the similarities between Jamaica and Trinidad.</p>
+</section>
+<section id="how-do-personality-types-compare-across-the-south-asian" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-personality-types-compare-across-the-south-asian">How do personality types compare across the South Asian?</h3>
+<p>I then created an identical graph, comparing the personality scores of Bangladesh, India, and Pakistan.</p>
+<div id="88035640-5a10-4096-b5ac-504eaf4a9454" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    big5_scored_df.query(<span class="st">'country in ["IN","PK","BD"]'</span>).</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        groupby(<span class="st">'country'</span>)[[<span class="st">'O'</span>,<span class="st">'C'</span>,<span class="st">'E'</span>,<span class="st">'A'</span>,<span class="st">'N'</span>]].</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>        agg(<span class="st">'mean'</span>).</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">round</span>(<span class="dv">1</span>).</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        transpose().</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        plot(kind<span class="op">=</span><span class="st">'barh'</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="blog_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This graph shows that the South Asian subcontinent scored almost identically on all five aspects of the Big 5 personality score. This comparison is very interesting and can also be explained by the history and cultures of these three countries. Especially since the countries are close in proximity and were all once part of the greater Indian colony of Great Britain.</p>
+</section>
+<section id="comparison-of-both-regions" class="level3">
+<h3 class="anchored" data-anchor-id="comparison-of-both-regions">Comparison of Both Regions</h3>
+<div id="92754999-00bf-4ef3-8c55-b320e6828756" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    big5_scored_df.query(<span class="st">'country in ["TT","GY","JM","IN","PK","BD"]'</span>).</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>        groupby(<span class="st">'country'</span>)[[<span class="st">'O'</span>,<span class="st">'C'</span>,<span class="st">'E'</span>,<span class="st">'A'</span>,<span class="st">'N'</span>]].</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        agg(<span class="st">'mean'</span>).</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">round</span>(<span class="dv">1</span>).</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>        transpose().</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        plot(kind<span class="op">=</span><span class="st">'barh'</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="blog_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this merge graph, further comparisons can be drawn. Again, the six countries have diverse scores for the different factors. Guyana is again an outlier since it has the most differing score compared to the other 5 countries, specifically extraversion and conscientiousness.</p>
+<p>The comparison of these two regions does not necessarily prove that the country has a direct relationship with personality type. However, in the case of South Asia, the strong similarities between the three countries can imply a relationship, perhaps rooted in the shared history of the region. While the difference in the Caribbean countries can be a result of the racial and historical diversity of the region.</p>
+<p>Overall, these graphs provide an interesting analysis on the role of cultural simialrities in the personality type of populations!</p>
 
 
 </section>
