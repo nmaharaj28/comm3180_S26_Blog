@@ -202,19 +202,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="what-are-the-historically-top-performing-countries">What are the historically top-performing countries?</h3>
 <p>To begin the analysis, I calculated which countries have received the most medals since the creation of the Winter Olympics in 1924 from historical data. This data, which can be accessed <a href="https://commjhub.asc.upenn.edu/hub/user-redirect/lab/tree/comm3180_S26/comm3180_S26_Blog/posts/003_olympics/data/winter_olympics_medals.csv">here</a>, is a dataset documenting the athlete, sport, and country of each of the Olympic medals won since 1923.</p>
 <p>For this analysis, I took the total number of medals, without regard to if they were gold, silver, or bronze, to determine which country has received the most number of medals. We will be looking at the top ten countries for this analysis.</p>
-<div id="c7c16944-a501-4b2f-8540-81281e354ecb" class="cell" data-execution_count="12">
+<div id="c7c16944-a501-4b2f-8540-81281e354ecb" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="b5c3009c-a630-4920-b99a-893e9413927b" class="cell" data-execution_count="13">
+<div id="b5c3009c-a630-4920-b99a-893e9413927b" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>wolympics_df <span class="op">=</span> pd.read_csv(<span class="st">'data/winter_olympics_medals.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="070687f5-6b01-4480-8a59-541e2bd98b91" class="cell" data-execution_count="14">
+<div id="070687f5-6b01-4480-8a59-541e2bd98b91" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>medal_counts <span class="op">=</span> wolympics_df[<span class="st">'team'</span>].value_counts()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="9f296f2d-e42e-4215-a49f-a674662cbc92" class="cell" data-execution_count="19">
+<div id="9f296f2d-e42e-4215-a49f-a674662cbc92" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(medal_counts.head(<span class="dv">10</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>team
@@ -232,16 +232,16 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 <p>From the inital count above, we can see that the United States has earned the most amount of medals, slightly more than double the amount as France, who has earned the tenth most amount of medals. The range of medals is a vast 570 to 1142.</p>
-<div id="9a27ef79-c7d6-45a9-9ef7-55021b9062a7" class="cell" data-execution_count="25">
+<div id="9a27ef79-c7d6-45a9-9ef7-55021b9062a7" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>top_10<span class="op">=</span>medal_counts.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="fe77b16b-a6ea-4e4b-80b2-09069a1b3c00" class="cell" data-execution_count="26">
+<div id="fe77b16b-a6ea-4e4b-80b2-09069a1b3c00" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.figure()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>top_10.plot(kind<span class="op">=</span><span class="st">'bar'</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Top 10 Countries by Total Winter Olympic Medals Ever"</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Country"</span>)</span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Total Medals"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>Text(0, 0.5, 'Total Medals')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -256,7 +256,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="diversity-of-geography" class="level3">
 <h3 class="anchored" data-anchor-id="diversity-of-geography">Diversity of Geography</h3>
-<div id="45f59409-06d2-4841-ad7d-ad13cf003898" class="cell" data-execution_count="57">
+<div id="45f59409-06d2-4841-ad7d-ad13cf003898" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>world_gdf <span class="op">=</span> gpd.read_file(<span class="st">'data/worldmap.json'</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>combined_gdf <span class="op">=</span> pd.merge(world_gdf,</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                        medal_counts,</span>
@@ -265,7 +265,7 @@ Name: count, dtype: int64</code></pre>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                        how<span class="op">=</span><span class="st">'outer'</span>)</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>combined_gdf[<span class="st">'count'</span>] <span class="op">=</span> combined_gdf[<span class="st">'count'</span>].fillna(<span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="209bbd53-84b1-4c76-994a-6facff2693a1" class="cell" data-execution_count="58">
+<div id="209bbd53-84b1-4c76-994a-6facff2693a1" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>combined_gdf.plot(column<span class="op">=</span><span class="st">'count'</span>,</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                  legend<span class="op">=</span><span class="va">True</span>,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                  legend_kwds<span class="op">=</span>{</span>
@@ -298,14 +298,14 @@ Name: count, dtype: int64</code></pre>
 <section id="diversity-of-performance" class="level1">
 <h1>Diversity of Performance</h1>
 <p>I also wanted to analyze whether countries demonstrated diversity in their performance, specifically, where their high medal counts were originating from. For example, were their totals driven primarily by gold medals, or were they spread across gold, silver, and bronze? Additionally, were these medals concentrated in just a few sports, or distributed across a more diverse range of disciplines?</p>
-<div id="d43ada5f-87fe-46a3-b39f-8a044586866b" class="cell" data-execution_count="48">
+<div id="d43ada5f-87fe-46a3-b39f-8a044586866b" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>top_10_countries <span class="op">=</span> medal_counts.head(<span class="dv">10</span>).index.tolist()</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>medal_filter <span class="op">=</span> <span class="op">~</span>wolympics_df[<span class="st">'medal'</span>].isna()</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>top10_filter <span class="op">=</span> wolympics_df[<span class="st">'team'</span>].isin(top_10_countries)</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>top10_medals_df <span class="op">=</span> wolympics_df[medal_filter <span class="op">&amp;</span> top10_filter].groupby([<span class="st">'team'</span>, <span class="st">'medal'</span>]).size().unstack()</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>top10_medals_df <span class="op">=</span> top10_medals_df.reindex(top_10_countries)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="b065be8d-ceb8-4f54-b641-6d2ec3a4d03d" class="cell" data-execution_count="49">
+<div id="b065be8d-ceb8-4f54-b641-6d2ec3a4d03d" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>top10_medals_df.plot(kind<span class="op">=</span><span class="st">'bar'</span>, </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                     color<span class="op">=</span>[<span class="st">'#CD7F32'</span>, <span class="st">'#FFD700'</span>, <span class="st">'#C0C0C0'</span>],</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                     figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
@@ -327,7 +327,7 @@ Name: count, dtype: int64</code></pre>
 <p>The countries have a diverse collection of gold, silver, and bronze medals. However, the United States has a signifcant majortiy of silver medals, while Canada has a large majortiy of gold medals. It suggest that, despite the United States having the most medals, Canada may have more higher-preforming athletes. Finland also has a high portion of bronze medals, another country with a less diverse distribution.</p>
 <p>The rest of the countries have a more diverse and equal distribution of gold, silver, and bronze medals.</p>
 <p>I then conducted an analysis to see the diversity of sports that countries earned medals from. I created a pie chart for each of the 10 countries to see what sports they earned their medals from.</p>
-<div id="90c6ca3f-6c88-400e-84e4-57aede3c8a01" class="cell" data-execution_count="66">
+<div id="90c6ca3f-6c88-400e-84e4-57aede3c8a01" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>country_data <span class="op">=</span> wolympics_df[medal_filter <span class="op">&amp;</span> (wolympics_df[<span class="st">'team'</span>] <span class="op">==</span> <span class="st">'United States'</span>)].groupby(<span class="st">'discipline'</span>).size()</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.pie(country_data.values, labels<span class="op">=</span>country_data.index, autopct<span class="op">=</span><span class="st">'%1.0f</span><span class="sc">%%</span><span class="st">'</span>)</span>
@@ -341,7 +341,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="94dc6931-8134-4083-945d-36cca25f820c" class="cell" data-execution_count="67">
+<div id="94dc6931-8134-4083-945d-36cca25f820c" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>country_data <span class="op">=</span> wolympics_df[medal_filter <span class="op">&amp;</span> (wolympics_df[<span class="st">'team'</span>] <span class="op">==</span> <span class="st">'Canada'</span>)].groupby(<span class="st">'discipline'</span>).size()</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.pie(country_data.values, labels<span class="op">=</span>country_data.index, autopct<span class="op">=</span><span class="st">'%1.0f</span><span class="sc">%%</span><span class="st">'</span>)</span>
@@ -355,17 +355,22 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="6c5f9eb2-38df-4269-8894-50df39a06312" class="cell" data-execution_count="68">
+<div id="6c5f9eb2-38df-4269-8894-50df39a06312" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>country_data <span class="op">=</span> wolympics_df[medal_filter <span class="op">&amp;</span> (wolympics_df[<span class="st">'team'</span>] <span class="op">==</span> <span class="st">'Sweden'</span>)].groupby(<span class="st">'discipline'</span>).size()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>))</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>plt.pie(country_data.values, labels<span class="op">=</span>country_data.index, autopct<span class="op">=</span><span class="st">'%1.0f</span><span class="sc">%%</span><span class="st">'</span>)</span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Sweden Medal Distribution'</span>)</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="olympics blog_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
-</figure>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[1]</span><span class="ansi-green-fg">, line 1</span>
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> country_data = <span class="ansi-yellow-bg">wolympics_df</span>[medal_filter &amp; (wolympics_df[<span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">team</span><span class="ansi-yellow-fg">'</span>] == <span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">Sweden</span><span class="ansi-yellow-fg">'</span>)].groupby(<span class="ansi-yellow-fg">'</span><span class="ansi-yellow-fg">discipline</span><span class="ansi-yellow-fg">'</span>).size()
+<span class="ansi-green-fg">      2</span> plt.figure(figsize=(<span class="ansi-green-fg">6</span>, <span class="ansi-green-fg">6</span>))
+<span class="ansi-green-fg">      3</span> plt.pie(country_data.values, labels=country_data.index, autopct=<span class="ansi-yellow-fg">'</span><span style="font-weight:bold;color:rgb(175,95,135)">%1.0f</span><span style="font-weight:bold;color:rgb(175,95,135)">%%</span><span class="ansi-yellow-fg">'</span>)
+
+<span class="ansi-red-fg">NameError</span>: name 'wolympics_df' is not defined</pre>
 </div>
 </div>
 </div>
