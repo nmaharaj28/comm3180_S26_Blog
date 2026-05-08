@@ -1,7 +1,7 @@
 ---
 title: About
 image: pic.heic
-about: This blog is will contain Nicholas’s data blogs. Nicholas is a student that is passionate about learning and utilizing technology to create an impact. She currently studies Communications & Computer Science with a concentration in Data and Network sicence at the University of Pennsylvania
+about: This blog will contain Nicholas’s data blogs. Nicholas is a current student at the University of Pennsylvania, majoring in Communication & Political Science with a concentration in Data and Network Science.
 
   template: jolla
 ---
