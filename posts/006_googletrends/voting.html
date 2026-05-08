@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Nicholas Maharaj">
+<meta name="dcterms.date" content="2026-05-08">
+<meta name="description" content="I analyzed Google Trend data to determine how many people try to find resources to change their vote.">
 
-<title>My Data Stories</title>
+<title>Do people regret their vote? – My Data Stories</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,28 +26,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4897d45d2f75ed4f519693be625836c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4897d45d2f75ed4f519693be625836c5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,77 +108,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">My Data Stories</span>
     </a>
   </div>
@@ -153,7 +131,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -171,294 +149,115 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page-left">
-      <h1 class="title">My Data Stories</h1>
-                      </div>
+    <div class="quarto-title column-body">
+      <h1 class="title">Do people regret their vote?</h1>
+                  <div>
+        <div class="description">
+          I analyzed Google Trend data to determine how many people try to find resources to change their vote.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">data stories</div>
+              </div>
+                  </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page-left">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Nicholas Maharaj </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 8, 2026</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(8)</span></div><div class="category" data-category="ZGF0YSUyMHN0b3JpZXM=">data stories <span class="quarto-category-count">(8)</span></div><div class="category" data-category="cmVnaW9u">region <span class="quarto-category-count">(2)</span></div><div class="category" data-category="dmlvbGVuY2U=">violence <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dmlzdWFsaXphdGlvbg==">visualization <span class="quarto-category-count">(2)</span></div><div class="category" data-category="d2VhdGhlcg==">weather <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p><img src="vote.webp" class="img-fluid"></p>
+<section id="do-people-regret-their-vote" class="level1">
+<h1>Do people regret their vote?</h1>
+<p>The role of a voter is essential for American democracy, as voters have the power to determine the future of the government. However, sometimes voters are not fully informed. The average American voter is most likely not privy to every candidate’s proposed policy, qualifications, and stances on key issues.</p>
+<p>Inspired by the 2024 presidential election, I decided to consult Google Trends data to see how many users searched for resources to change their vote, after the election results were announced.</p>
+<div id="9612cae4-c6f7-41b5-b346-7677af839668" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">'ignore'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>I used Google Trends to identify how many people looked up “Can I change my vote?” from November 1 to the present day. This time frame will provide an idea of voter regret following the 2024 presidental election.</p>
+<div id="01c839be-9235-4b26-bb7f-4e6ebb15d3b1" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>vote_df <span class="op">=</span> pd.read_csv(<span class="st">'changevote.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="5e1defe9-d55c-4a33-84e0-c64263b218b0" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>vote_df <span class="op">=</span> pd.read_csv(<span class="st">'changevote.csv'</span>,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                      skiprows<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                      index_col<span class="op">=</span><span class="dv">0</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                      parse_dates<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>vote_df <span class="op">=</span> vote_df.replace(<span class="st">'&lt;1'</span>, <span class="dv">0</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>vote_df <span class="op">=</span> vote_df.<span class="bu">apply</span>(pd.to_numeric, errors<span class="op">=</span><span class="st">'coerce'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="c40e8644-46a9-4e3f-8487-6959c4fcd8f5" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ts_plot<span class="op">=</span>vote_df.plot()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="voting_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph above shows a strong spike in queries about changing votes shortly after the presidential election results in November 2024, likely driven by widespread public reaction to the outcome. Searches of this nature tend to surge in the immediate aftermath of major elections, as voters process results they may find unexpected or unwelcome.</p>
+<p>After that initial spike, query volume dropped significantly and remained relatively low through early 2026.</p>
+<p>The spike in April of 2026 can reflect the upcoming midterm elections and growing disapproval for President Trump.</p>
+<div id="9bd8f13b-192b-4986-a228-bc7766194c30" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nov_df <span class="op">=</span> vote_df.loc[<span class="st">'2024-11'</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>nov_df.plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">4</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="voting_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>With the largest queries coming from November 2024, I decided to take a closer look at the month and determine what specific weeks had the most searches.</p>
+<p>In the first week of November, searches reached around 70, shortly before Election Day, suggesting that some voters were having second thoughts from early voting or mail-in ballots. The search then reached 100 the week of November 10th, the week immediately following the election, after Trump was declared president-elect.</p>
+<p>After that, people stopped searching for resources to change their vote after November 17, suggesting that voters accepted the results of the election.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Overall, the analysis of Google Trends data shows that some voters do regret their vote after election results are announced and the president-elect begins enacting their policies and executive orders.</p>
+<p>However, interest in changing votes notable decreases after the second week after the election, implying that voters tend to accept election results and the fact that their vote is final.</p>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ZGF0YSUyMHN0b3JpZXM=" data-listing-date-sort="1778198400000" data-listing-file-modified-sort="1778268505543" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="357">
-<div class="thumbnail"><a href="./posts/006_googletrends/voting.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/006_googletrends/vote.webp"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/006_googletrends/voting.html" class="no-external">Do people regret their vote?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/006_googletrends/voting.html" class="no-external">
-<p>I analyzed Google Trend data to determine how many people try to find resources to change their vote.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/006_googletrends/voting.html" class="no-external">
-<div class="listing-date">
-May 8, 2026
-</div>
-<div class="listing-author">
-Nicholas Maharaj
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="ZGF0YSUyMHN0b3JpZXMlMkN2aW9sZW5jZQ==" data-listing-date-sort="1774137600000" data-listing-file-modified-sort="1778268505524" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="667">
-<div class="thumbnail"><a href="./posts/005_shootingdata/shooting.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/005_shootingdata/stopguns.jpg"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/005_shootingdata/shooting.html" class="no-external">What factors produce the highest likelyhood of a shooting victim’s survival?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('dmlvbGVuY2U='); return false;">violence</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/005_shootingdata/shooting.html" class="no-external">
-<p>I analyzed historic shooting data in Philadelphia to see common factors between survivors.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/005_shootingdata/shooting.html" class="no-external">
-<div class="listing-date">
-Mar 22, 2026
-</div>
-<div class="listing-author">
-Nicholas Maharaj
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="ZGF0YSUyMHN0b3JpZXM=" data-listing-date-sort="1772755200000" data-listing-file-modified-sort="1778268505523" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="790">
-<div class="thumbnail"><a href="./posts/004_crash/dow4.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/004_crash/carcrash.jpg"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/004_crash/dow4.html" class="no-external">How do crash data compare between young and elderly drivers?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/004_crash/dow4.html" class="no-external">
-<p>I analyzed crash data from Philadelphia to draw comparisons between young and elderly drivers on different categories.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/004_crash/dow4.html" class="no-external">
-<div class="listing-date">
-Mar 6, 2026
-</div>
-<div class="listing-author">
-Nicholas Maharaj
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="ZGF0YSUyMHN0b3JpZXMlMkNyZWdpb24=" data-listing-date-sort="1770940800000" data-listing-file-modified-sort="1778268505038" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="465">
-<div class="thumbnail"><a href="./posts/002_personality/blog.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/002_personality/ptype.webp"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/002_personality/blog.html" class="no-external">How does the Big Five Personality traits vary among similar regions?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cmVnaW9u'); return false;">region</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/002_personality/blog.html" class="no-external">
-<p>I analyzed Big Five Personality data in three Caribbean countries and compared it to three South Asian countries.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/002_personality/blog.html" class="no-external">
-<div class="listing-date">
-Feb 13, 2026
-</div>
-<div class="listing-author">
-Nicholas Maharaj
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="ZGF0YSUyMHN0b3JpZXMlMkNyZWdpb24=" data-listing-date-sort="1770940800000" data-listing-file-modified-sort="1778268505519" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="770">
-<div class="thumbnail"><a href="./posts/003_olympics/olympics blog.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/003_olympics/olympics.jpg"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/003_olympics/olympics blog.html" class="no-external">How diversified are top-performing countries in the Winter Olympics?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('cmVnaW9u'); return false;">region</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/003_olympics/olympics blog.html" class="no-external">
-<p>I analyzed historic Winter Olympics data to see the diversity of high performing countries.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/003_olympics/olympics blog.html" class="no-external">
-<div class="listing-date">
-Feb 13, 2026
-</div>
-<div class="listing-author">
-Nicholas Maharaj
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="ZGF0YSUyMHN0b3JpZXMlMkN3ZWF0aGVy" data-listing-date-sort="1770336000000" data-listing-file-modified-sort="1778268505037" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="334">
-<div class="thumbnail"><a href="./posts/001_phillyweather/weather.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/001_phillyweather/party.jpg"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/001_phillyweather/weather.html" class="no-external">What are the warmest and rainiest days in Philadelphia?</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('d2VhdGhlcg=='); return false;">weather</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/001_phillyweather/weather.html" class="no-external">
-<p>I took analyzed weather data in Philadelphia from 2010.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/001_phillyweather/weather.html" class="no-external">
-<div class="listing-date">
-Feb 6, 2026
-</div>
-<div class="listing-author">
-Nicholas Maharaj
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="dmlzdWFsaXphdGlvbiUyQ2RhdGElMjBzdG9yaWVz" data-listing-date-sort="1768176000000" data-listing-file-modified-sort="1778268505034" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
-<div class="thumbnail"><a href="./posts/000_test_post/testpost.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/000_test_post/testpost_files/figure-html/cell-4-output-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/000_test_post/testpost.html" class="no-external">A test post</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('dmlzdWFsaXphdGlvbg=='); return false;">visualization</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/000_test_post/testpost.html" class="no-external">
-<p>An example post from a Jupyter notebook</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/000_test_post/testpost.html" class="no-external">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-<div class="listing-author">
-An LLM User
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="dmlzdWFsaXphdGlvbiUyQ2RhdGElMjBzdG9yaWVz" data-listing-date-sort="1768176000000" data-listing-file-modified-sort="1778268505034" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="10">
-<div class="thumbnail"><a href="./posts/000_test_post/index.html" class="no-external">
-
-<p class="card-img-top"><img loading='lazy' src="posts/000_test_post/index_files/figure-html/cell-4-output-1.png"  class="thumbnail-image card-img"/></p>
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/000_test_post/index.html" class="no-external">A test post</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('dmlzdWFsaXphdGlvbg=='); return false;">visualization</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHN0b3JpZXM='); return false;">data stories</div>
-
-</div>
-<div class="delink listing-description"><a href="./posts/000_test_post/index.html" class="no-external">
-<p>An example post from a Jupyter notebook</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/000_test_post/index.html" class="no-external">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-<div class="listing-author">
-An LLM User
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

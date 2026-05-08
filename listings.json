@@ -2,11 +2,14 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/003_olympics/olympics blog.html",
+      "/posts/006_googletrends/voting.html",
+      "/posts/005_shootingdata/shooting.html",
+      "/posts/004_crash/dow4.html",
       "/posts/002_personality/blog.html",
+      "/posts/003_olympics/olympics blog.html",
       "/posts/001_phillyweather/weather.html",
-      "/posts/000_test_post/index.html",
-      "/posts/000_test_post/testpost.html"
+      "/posts/000_test_post/testpost.html",
+      "/posts/000_test_post/index.html"
     ]
   }
 ]

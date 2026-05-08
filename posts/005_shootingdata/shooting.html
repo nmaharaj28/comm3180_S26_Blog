@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="An LLM User">
-<meta name="dcterms.date" content="2026-01-12">
-<meta name="description" content="An example post from a Jupyter notebook">
+<meta name="author" content="Nicholas Maharaj">
+<meta name="dcterms.date" content="2026-03-22">
+<meta name="description" content="I analyzed historic shooting data in Philadelphia to see common factors between survivors.">
 
-<title>A test post – My Data Stories</title>
+<title>What factors produce the highest likelyhood of a shooting victim’s survival? – My Data Stories</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -150,15 +150,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">A test post</h1>
+      <h1 class="title">What factors produce the highest likelyhood of a shooting victim’s survival?</h1>
                   <div>
         <div class="description">
-          An example post from a Jupyter notebook
+          I analyzed historic shooting data in Philadelphia to see common factors between survivors.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">visualization</div>
                 <div class="quarto-category">data stories</div>
+                <div class="quarto-category">violence</div>
               </div>
                   </div>
   </div>
@@ -169,14 +169,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>An LLM User </p>
+               <p>Nicholas Maharaj </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 12, 2026</p>
+        <p class="date">March 22, 2026</p>
       </div>
     </div>
     
@@ -195,31 +195,156 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div id="aa3244f6-8010-4390-b8ca-383ad9126fa1" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><img src="stopguns.jpg" class="img-fluid"></p>
+<section id="what-are-common-factors-across-philadelphia-shootings" class="level1">
+<h1>What are common factors across Philadelphia shootings?</h1>
+<p>Philadelphia is one of the biggest cities in the United States, so the city is often associated with mass crime. Additionally, a mass shootings and gun violence rise in the United States, many people are often afraid of moving to big cities and the United States is often overshadowed by mass shootings that occur frequenlty across the nation. Even recently, <a href="https://www.cbsnews.com/philadelphia/news/shooting-in-philadelphia-cobbs-creek/">on March 30</a>, a shooting in Cobbs Creek, Philadelphia killed 2 people and left 3 injured.</p>
+<p>With these shootings constantly appearing in the news, I decided to analyze <a href="https://commjhub.asc.upenn.edu/user/nmaharaj28/lab/workspaces/auto-S/tree/comm3180_S26/comm3180_S26_Blog/posts/005_shootingdata/shootings.csv">historical Philadelphia shooting data</a> to identify patterns in victim survival. Specifically, I wanted to determine whether factors beyond the location of a wound—such as demographics and the setting of the shooting—are correlated with higher or lower survival rates.</p>
+<div id="5250b5cf-fd9e-4efb-987b-73a4cb15481c" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>warnings.simplefilter(<span class="st">'ignore'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="stories-from-data" class="level2">
-<h2 class="anchored" data-anchor-id="stories-from-data">Stories from data</h2>
-<ul>
-<li>Let’s set up some data</li>
-</ul>
-<div id="9c799178-2c98-46a7-87fb-3fbbef3bcc05" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0df3ec19-3814-4e82-91c1-fe03c1026d54" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>shoot_df <span class="op">=</span> pd.read_csv(<span class="st">'shootings.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="now-lets-visualize-it" class="level3">
-<h3 class="anchored" data-anchor-id="now-lets-visualize-it">Now let’s visualize it</h3>
-<div id="9e226edb-5315-4d01-a6a6-709d5858e4a9" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plt.bar(x, y)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="what-is-the-correlation-between-fatality-rate-and-wound-location" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-the-correlation-between-fatality-rate-and-wound-location">What is the correlation between fatality rate and wound location?</h3>
+<p>When it comes to shootings, the location of a person’s wound is most likely to determine their survival rate. For example, getting shot in a critical organ is more likely to cause death than other wound locations. With this in mind, I determined the most common wound location in Philadelphia shootings.</p>
+<div id="fcef9c5b-f643-4682-b5ce-9baac33cea26" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>wound_counts <span class="op">=</span> shoot_df[<span class="st">'wound'</span>].value_counts()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>wound_counts <span class="op">=</span> wound_counts[wound_counts <span class="op">&gt;=</span> <span class="dv">50</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>wound_counts.plot(kind<span class="op">=</span><span class="st">'barh'</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>plt.gca().invert_yaxis()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Most Common Wound Locations in Philadelphia Shootings'</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of Victims'</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Wound Location'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="shooting_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>As shown in the graph above, the most common shooting pattern among Philadelphia gun violence victims involves multiple wounds. This is followed by injuries to the leg, then the head, chest, and arm. Incidents involving multiple wounds occur at nearly twice the rate of those involving leg injuries. This data is striking, but I wanted to determine which wound location is associated with a higher fatality rate.</p>
+<div id="0e1d7093-fe88-438b-95fa-9f87737bde9a" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>shoot_df[<span class="st">'wound_clean'</span>] <span class="op">=</span> shoot_df[<span class="st">'wound'</span>].<span class="bu">str</span>.strip().<span class="bu">str</span>.title()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>wound_fatal_df <span class="op">=</span> shoot_df[[<span class="st">'wound_clean'</span>, <span class="st">'fatal'</span>]].dropna()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>common_wounds <span class="op">=</span> wound_counts.index</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>wound_fatal_df <span class="op">=</span> wound_fatal_df[wound_fatal_df[<span class="st">'wound_clean'</span>].isin(common_wounds)]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>wound_fatality <span class="op">=</span> wound_fatal_df.groupby(<span class="st">'wound_clean'</span>)[<span class="st">'fatal'</span>].mean().sort_values(ascending<span class="op">=</span><span class="va">True</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>wound_fatality.plot(kind<span class="op">=</span><span class="st">'barh'</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>), color<span class="op">=</span><span class="st">'firebrick'</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Fatality Rate by Wound Location'</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Fatality Rate'</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Wound Location'</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="shooting_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph above shows the fatality rate by wound location. Notably, shots to multiple parts of the body are associated with the highest fatality rate. This is intuitive, as multiple wounds can lead to increased blood loss and more severe injuries. The second-highest fatality rate is associated with head wounds, which is also expected given that brain injuries are often fatal. Finally, chest wounds rank third in fatality rate. The chest contains vital organs such as the heart and lungs, and injuries to these critical areas can quickly lead to death.</p>
+</section>
+<section id="what-is-the-correlation-between-fatality-rate-and-indooroutdoor-shootings" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-the-correlation-between-fatality-rate-and-indooroutdoor-shootings">What is the correlation between fatality rate and indoor/outdoor shootings?</h3>
+<p>The dataset also captures if the shooting tooks places indoor or outdoors. The location of a shooting can have an impact on a victim’s survival rate. For example, the ability to flee or access to an exit can impact survival rates. With this in mind, I looked at how many shootings were conducted indoors and outdoors.</p>
+<div id="7d7712ad-f10a-4d18-8389-446cdc901d95" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>location_df <span class="op">=</span> shoot_df[[<span class="st">'inside'</span>, <span class="st">'outside'</span>]].dropna()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>indoor_count <span class="op">=</span> location_df[<span class="st">'inside'</span>].<span class="bu">sum</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>outdoor_count <span class="op">=</span> location_df[<span class="st">'outside'</span>].<span class="bu">sum</span>()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>location_counts <span class="op">=</span> pd.Series({<span class="st">'Indoor'</span>: indoor_count, <span class="st">'Outdoor'</span>: outdoor_count})</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>location_counts.plot(kind<span class="op">=</span><span class="st">'bar'</span>, figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Indoor vs. Outdoor Shootings in Philadelphia'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Location Type'</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Victims'</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="shooting_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph above shows that the vast majority of shootings in Philadelphia take place outdoors.</p>
+<div id="61e8eddd-40fc-45d1-9332-bf5dbe17b535" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>loc_fatal_df <span class="op">=</span> shoot_df[[<span class="st">'inside'</span>, <span class="st">'outside'</span>, <span class="st">'fatal'</span>]].dropna()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>indoor_fatal_rate <span class="op">=</span> loc_fatal_df[loc_fatal_df[<span class="st">'inside'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'fatal'</span>].mean() <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>outdoor_fatal_rate <span class="op">=</span> loc_fatal_df[loc_fatal_df[<span class="st">'outside'</span>] <span class="op">==</span> <span class="dv">1</span>][<span class="st">'fatal'</span>].mean() <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>fatality_by_location <span class="op">=</span> pd.Series({<span class="st">'Indoor'</span>: indoor_fatal_rate, <span class="st">'Outdoor'</span>: outdoor_fatal_rate})</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>fatality_by_location.plot(kind<span class="op">=</span><span class="st">'bar'</span>, figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">5</span>))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Fatality Rate by Indoor vs. Outdoor Shootings'</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Location Type'</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Fatality Rate'</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>plt.xticks(rotation<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="shooting_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, the fatality rate for indoor shootings in Philadelphia is significantly higher than for outdoor shootings. The graph above shows that the indoor fatality rate is around 35 percent, compared to 20 percent for outdoor incidents, despite the fact that most shootings occur outdoors. This difference is intuitive, as indoor shootings often provide fewer opportunities to flee, and victims are confined to enclosed spaces.</p>
+</section>
+<section id="what-is-the-correlation-between-fatality-rate-and-racial-demographics" class="level3">
+<h3 class="anchored" data-anchor-id="what-is-the-correlation-between-fatality-rate-and-racial-demographics">What is the correlation between fatality rate and racial demographics?</h3>
+<p>The data set also tracked the racial demographics of shooting victims. I decided to see the mortality rate of shooting victims to identify any key patterns.</p>
+<div id="c4b295b3-8abe-484d-8e89-d4512eaa80e8" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>shoot_df[<span class="st">'race'</span>].value_counts().plot(kind<span class="op">=</span><span class="st">'bar'</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="shooting_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph above shows that the vast majority of shooting victims in Philadelphia are Black. Followed by White victims, and then Asian. This data can imply a racial disadvantage with shooting victims.</p>
+<div id="75b2db07-c0e5-4064-ad40-1f89327d9077" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>race_fatal_df <span class="op">=</span> shoot_df[[<span class="st">'race'</span>, <span class="st">'fatal'</span>]].dropna()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>race_fatality <span class="op">=</span> race_fatal_df.groupby(<span class="st">'race'</span>)[<span class="st">'fatal'</span>].mean().sort_values(ascending<span class="op">=</span><span class="va">True</span>) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> race_fatality.plot(kind<span class="op">=</span><span class="st">'barh'</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Fatality Rate by Race/Ethnicity (%)'</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Fatality Rate (%)'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Race/Ethnicity'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>Text(0, 0.5, 'Race/Ethnicity')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="shooting_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, when we analyze the fatality rate of shooting victims by race, Asians are the most likely to die from a shooting in Philadelphia. After Asians, White people have the second-highest fatality rate. White people are nearly tied with Black people as they both have a slightly over 20 percent fatality rate. The high fatality rate among Asian victims may be driven by their relatively small number of total cases; with fewer incidents overall, even a small number of deaths can result in a higher fatality rate. In contrast, Black victims experience a much higher number of shootings, which can lead to a lower fatality rate proportionally despite a greater number of total incidents.</p>
 
 
 </section>

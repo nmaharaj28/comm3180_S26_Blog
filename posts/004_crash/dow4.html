@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="An LLM User">
-<meta name="dcterms.date" content="2026-01-12">
-<meta name="description" content="An example post from a Jupyter notebook">
+<meta name="author" content="Nicholas Maharaj">
+<meta name="dcterms.date" content="2026-03-06">
+<meta name="description" content="I analyzed crash data from Philadelphia to draw comparisons between young and elderly drivers on different categories.">
 
-<title>A test post – My Data Stories</title>
+<title>How do crash data compare between young and elderly drivers? – My Data Stories</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -150,14 +150,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">A test post</h1>
+      <h1 class="title">How do crash data compare between young and elderly drivers?</h1>
                   <div>
         <div class="description">
-          An example post from a Jupyter notebook
+          I analyzed crash data from Philadelphia to draw comparisons between young and elderly drivers on different categories.
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">visualization</div>
                 <div class="quarto-category">data stories</div>
               </div>
                   </div>
@@ -169,14 +168,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>An LLM User </p>
+               <p>Nicholas Maharaj </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 12, 2026</p>
+        <p class="date">March 6, 2026</p>
       </div>
     </div>
     
@@ -195,31 +194,161 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<div id="aa3244f6-8010-4390-b8ca-383ad9126fa1" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><img src="carcrash.jpg" class="img-fluid"></p>
+<section id="how-do-crash-data-compare-between-young-and-elderly-drivers" class="level1">
+<h1>How do crash data compare between young and elderly drivers?</h1>
+<p>Philadelphia is one of the largest cities in the United States, and it is prone to recording tens of thousands of automobile crashes every year. As a student who attends school in Philadelphia, I am concerned about the high number of crashes that occur in the city each year. Specifically, since I live on a college campus, I am worried about young drivers being reckless on the road. With these concerns in mind, I decided to analyze Philadelphia’s crash data to compare how young and elderly drivers fare on the road.</p>
+<p>The age contrast also prompted me to consider whether these groups differ significantly in crash frequency, crash severity, and whether factors like time of day influence them. I decided to compare young and elderly drivers because both groups are stereotyped as unskilled, reckless, or unsafe.</p>
+<p>To begin the analysis, I calculated which age group has the most recordered number of crashes using historical Philadelphia crash data from 2005 to 2024. The data can be accessed <a href="https://commjhub.asc.upenn.edu/user/nmaharaj28/lab/tree/comm3180_S26/08_DOW4_and_Geolocated_data_with_GeoPandas/data/PDOT_crash_data_2005_2024.csv">here</a>.</p>
+<div id="cd5b9a74-657a-4006-b62d-0e5d3b520991" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> camelot</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> calendar</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="stories-from-data" class="level2">
-<h2 class="anchored" data-anchor-id="stories-from-data">Stories from data</h2>
-<ul>
-<li>Let’s set up some data</li>
-</ul>
-<div id="9c799178-2c98-46a7-87fb-3fbbef3bcc05" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">3</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1d602b48-cf55-4e3c-a3c6-c1321ef8989b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>crash_data <span class="op">=</span> pd.read_csv(<span class="st">'PDOT_crash_data_2005_2024.csv'</span>, low_memory<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="now-lets-visualize-it" class="level3">
-<h3 class="anchored" data-anchor-id="now-lets-visualize-it">Now let’s visualize it</h3>
-<div id="9e226edb-5315-4d01-a6a6-709d5858e4a9" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plt.bar(x, y)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="729ee6f6-1785-483f-bb57-d46acd0609e0" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>age_crash_counts <span class="op">=</span> {label: (crash_data[col] <span class="op">&gt;</span> <span class="dv">0</span>).<span class="bu">sum</span>() <span class="cf">for</span> col, label <span class="kw">in</span> age_labels.items()}</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>age_counts_df <span class="op">=</span> pd.DataFrame.from_dict(age_crash_counts, orient<span class="op">=</span><span class="st">'index'</span>, columns<span class="op">=</span>[<span class="st">'Crash Count'</span>])</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>age_counts_df.plot(kind<span class="op">=</span><span class="st">'bar'</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                   figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                   legend<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Number of Crashes Involving Drivers by Age Group'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Driver Age'</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Crashes'</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="dow4_files/figure-html/cell-4-output-1.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+<p>In the bar graph above, you can see how the number of crashes compares across various age groups. The dataset separates teenagers but groups elder drivers in three categories: 50-64, 65-75, and 75+. The 50-64 age group has the highest number of crashes, with over 175,000. However, when you compare this number with the total number of crashes from young drivers (16-20), you get 121,723. Both young drivers and 50-64 drivers have comparable numbers, but ultimately, older drivers are involved in more car crashes. This is shocking, as the stereotype of the young, reckless driver is stronger than older drivers being more accident prone.</p>
+<section id="how-does-crash-severity-compare-between-the-age-groups" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-crash-severity-compare-between-the-age-groups">How does crash severity compare between the age groups?</h2>
+<p>Next, I decided to analyze the severity of crashes among young and older drivers. While it is easy to make a simple comparison and identify which group has the most crashes, it is important to assess how these crashes compare in severity.</p>
+<div id="780eaef5-93a9-4fc6-b48b-96e7ab386f51" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>young_filter <span class="op">=</span> crash_data[[<span class="st">'DRIVER_COUNT_16YR'</span>, <span class="st">'DRIVER_COUNT_17YR'</span>, <span class="st">'DRIVER_COUNT_18YR'</span>, <span class="st">'DRIVER_COUNT_19YR'</span>, <span class="st">'DRIVER_COUNT_20YR'</span>]].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>older_filter <span class="op">=</span> crash_data[[<span class="st">'DRIVER_COUNT_50_64YR'</span>, <span class="st">'DRIVER_COUNT_65_74YR'</span>, <span class="st">'DRIVER_COUNT_75PLUS'</span>]].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>) <span class="op">&gt;</span> <span class="dv">0</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>young_crashes <span class="op">=</span> crash_data[young_filter]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>older_crashes <span class="op">=</span> crash_data[older_filter]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>young_severity <span class="op">=</span> young_crashes[young_crashes[<span class="st">'MAX_SEVERITY_LEVEL'</span>] <span class="op">&gt;</span> <span class="dv">0</span>][<span class="st">'MAX_SEVERITY_LEVEL'</span>].value_counts().sort_index()</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>older_severity <span class="op">=</span> older_crashes[older_crashes[<span class="st">'MAX_SEVERITY_LEVEL'</span>] <span class="op">&gt;</span> <span class="dv">0</span>][<span class="st">'MAX_SEVERITY_LEVEL'</span>].value_counts().sort_index()</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>severity_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Young Drivers (16–20)'</span>: young_severity,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Older Drivers (50-75+)'</span>: older_severity</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>severity_df.plot(kind<span class="op">=</span><span class="st">'bar'</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>                 figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>))</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'MAX Severity Level: Young Drivers (16–20) and Older Drivers (50-75+)'</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Severity Level'</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Crashes'</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dow4_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the bar graph above, you can see that older drivers are involved in more severe car crashes at every level, compared to young drivers. The largest differences appear at severity levels 3, 4, and 8, where older drivers have more crashes in those severity levels. Both groups have the most severe car crashes at level 4.</p>
+<p>When comparing totals across all severity levels, older drivers clearly account for more crashes overall, especially in the mid-to-high severity categories. While young drivers do show a noticeable number of crashes at higher severity levels, their counts remain consistently lower than those of older drivers. This suggests that although young drivers are often perceived as more reckless, older drivers are involved in a greater number of crashes across severity levels.</p>
+</section>
+<section id="how-does-time-of-crash-compare-between-the-age-groups" class="level2">
+<h2 class="anchored" data-anchor-id="how-does-time-of-crash-compare-between-the-age-groups">How does time of crash compare between the age groups?</h2>
+<div id="f99035c9-f879-4350-87e2-a2bb07f24804" class="cell" data-execution_count="29">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>young_hour <span class="op">=</span> young_crashes[young_crashes[<span class="st">'HOUR_OF_DAY'</span>] <span class="op">!=</span> <span class="dv">99</span>][<span class="st">'HOUR_OF_DAY'</span>].value_counts().sort_index()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>older_hour <span class="op">=</span> older_crashes[older_crashes[<span class="st">'HOUR_OF_DAY'</span>] <span class="op">!=</span> <span class="dv">99</span>][<span class="st">'HOUR_OF_DAY'</span>].value_counts().sort_index()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>hour_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Young Drivers (16–20)'</span>: young_hour,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Older Drivers (50-75+)'</span>: older_hour</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>hour_df.plot(kind<span class="op">=</span><span class="st">'line'</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>             figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>             linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>             marker<span class="op">=</span><span class="st">'o'</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>             markersize<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Crashes by Hour of Day: Young Drivers (16–20) vs. Older Drivers (50-75+)'</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Hour of Day'</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Crashes'</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Driver Group'</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dow4_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the line graph above, you can see how the number of crashes varies by hour of the day for young drivers compared to older drivers. Both sets of drivers have a peak in crashes ar around 7 am, which can align with when teenagers are commuting to work or when elderly drivers are driving to work. However, many elderly drivers may be retired, so it is interesting to see that their spike in crashes during the morning is higher than that of younger drivers.</p>
+<p>As the day progresses, crashes for both groups continue to rise, but the gap between them is larger. Older drivers reach their peak in the late afternoon, which may correspond with heavier traffic and driving during busier hours. However, young drivers also peak in the afternoon, but at lower levels, possibly because they spend more time in school or college, limiting their travel during the daytime. As expected, the crash data starts to decrease as the night begins (at around 7 pm), as most people have finished their commutes and are no longer on the road.</p>
+<div id="52244460-12b9-467c-a9c9-db17eaa9d2e1" class="cell" data-execution_count="26">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>crash_data[<span class="st">'DAY_OF_WEEK'</span>].value_counts().sort_index()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>DAY_OF_WEEK
+1     83804
+2     94204
+3     98996
+4    100527
+5    100881
+6    113384
+7     99273
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+<div id="531e7f21-6b1d-435c-a086-b693d99fe8c3" class="cell" data-execution_count="30">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>young_dow <span class="op">=</span> young_crashes[<span class="st">'DAY_OF_WEEK'</span>].value_counts().sort_index()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>older_dow <span class="op">=</span> older_crashes[<span class="st">'DAY_OF_WEEK'</span>].value_counts().sort_index()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>dow_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Young Drivers (16–20)'</span>: young_dow,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Older Drivers (50-75+)'</span>: older_dow</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>dow_df.plot(kind<span class="op">=</span><span class="st">'line'</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">6</span>),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            linewidth<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            marker<span class="op">=</span><span class="st">'o'</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            markersize<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Crashes by Day of Week: Young Drivers (16–20) vs. Older Drivers (50-75+)'</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Day of Week'</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Number of Crashes'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">'Driver Group'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="dow4_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the line graph above, you can see how the number of crashes varies by day of the week for young drivers compared to older drivers. Both groups show a steady increase in crashes from the beginning of the week, with a noticeable peak on Saturday. This pattern makes sense as both younger and older drivers are more likely to be on the road on Saturday, either running errands or meeting with friends or family.</p>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>Overall, older drivers are more prone to accidents. According to the historical Philadelphia crash data, older drivers have a significantly larger number of crashes than younger drivers. However, younger and older drivers tend to crash at a similar severity level, time of day, and day of the week. We can use this data to know when drivers should take extra caution on the road and what type of driver might be more at risk of crashing.</p>
 
 
 </section>
