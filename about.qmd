@@ -3,5 +3,6 @@ title: "About"
 image: pic.heic
 about:
   template: jolla
-  description: "This blog will contain Nicholas's data blogs. Nicholas is a current student at the University of Pennsylvania, majoring in Communication & Political Science with a concentration in Data and Network Science."
 ---
+
+This blog will contain Nicholas's data blogs. Nicholas is a current student at the University of Pennsylvania, majoring in Communication & Political Science with a concentration in Data and Network Science.
